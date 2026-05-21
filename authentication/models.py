@@ -92,22 +92,22 @@ class ClientProfileModel(BaseModel):
     phone_no = models.CharField(max_length=12)
     industry = models.IntegerField(
         choices=IndustryChoices.choices, 
-        blank=True, 
-        null=True
+        # blank=True, 
+        # null=True
     )
     company_size = models.IntegerField(
         choices=CompanySizeChoices.choices, 
-        blank=True, 
-        null=True
+        # blank=True, 
+        # null=True
     )
-    brand_description = models.TextField(blank=True, null=True)
-    website_url = models.URLField(max_length=500, blank=True, null=True)
-    instagram_url = models.URLField(max_length=500, blank=True, null=True)
-    linkedin_url = models.URLField(max_length=500, blank=True, null=True)
-    gst_number = models.CharField(max_length=50, blank=True, null=True)
-    pan_number = models.CharField(max_length=50, blank=True, null=True)
-    billing_address = models.TextField(blank=True, null=True)
-    logo = models.ImageField(upload_to='brand_logos/', blank=True, null=True)
+    brand_description = models.TextField()
+    website_url = models.URLField(max_length=500 )
+    instagram_url = models.URLField(max_length=500 )
+    linkedin_url = models.URLField(max_length=500 )
+    gst_number = models.CharField(max_length=50 )
+    pan_number = models.CharField(max_length=50 )
+    billing_address = models.TextField()
+    logo = models.ImageField(upload_to='brand_logos/' )
     is_verified = models.BooleanField(
         default=False, 
         help_text="Indicates if the brand has the Verified badge"
