@@ -20,5 +20,12 @@ class CompanySizeChoices(models.IntegerChoices):
 
 
 
+class CampaignStatusChoices(models.IntegerChoices):
+    LIVE = 1, 'Live'
+    CLOSED = 2, 'Closed'
+    DRAFT = 3, 'Draft'
+
+
+
 
 

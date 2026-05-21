@@ -21,7 +21,8 @@ from core.jwt_token import generate_jwt_payload
 from .serializer import (
     UserLoginSerializer, 
     UserSignupSerializer,
-    ClientProfileSerializer
+    ClientProfileSerializer,
+    LogoUpdateSerializer
 )
 from authentication.models import (
     ClientProfileModel
@@ -179,6 +180,34 @@ class UserAuthViewSet(ModelViewSet):
                 "status": True,
                 "message": action_msg,
                 "data": serializer.data
+            }, status=HTTP_200_OK)
+
+        return Response({
+            "status": False,
+            "message": handle_serializer_exception(serializer)
+        }, status=HTTP_400_BAD_REQUEST)
+    
+    @action(detail= False,methods= ['PATCH'], permission_classes=[UserGeneralAuthorization]) 
+    def update_logo(self, request):
+        """Update ONLY the logo of the client profile"""
+        try:
+            profile = ClientProfileModel.objects.get(user=request.user_instance)
+        except ClientProfileModel.DoesNotExist:
+            return Response({
+                "status": False, 
+                "message": "Profile not found. Cannot update logo."
+            }, status=HTTP_404_NOT_FOUND)
+
+        serializer = LogoUpdateSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            logo_url = request.build_absolute_uri(profile.logo.url) if profile.logo else None
+            return Response({
+                "status": True,
+                "message": "Logo updated successfully",
+                "data": {
+                    "logo": logo_url
+                }
             }, status=HTTP_200_OK)
 
         return Response({

@@ -64,6 +64,9 @@ class UserLoginSerializer(Serializer):
         return user
 
 class ClientProfileSerializer(ModelSerializer):
+    member_since = serializers.SerializerMethodField()
+    total_orders = serializers.SerializerMethodField()
+    creators_hired = serializers.SerializerMethodField()
     class Meta:
         model = ClientProfileModel
         fields = [
@@ -82,8 +85,27 @@ class ClientProfileSerializer(ModelSerializer):
             'billing_address', 
             'logo', 
             'is_verified',
+            'member_since',
+            'total_orders',
+            'creators_hired'
         ]
-        read_only_fields = ['user', 'is_verified', 'id']
-    
+        read_only_fields = ['user', 'is_verified', 'id', 'member_since', 'total_orders', 'creators_hired']
+
+    def get_member_since(self, obj):
+        if obj.user and hasattr(obj.user, 'date_joined'):
+            return obj.user.date_joined.strftime("%b %Y")
+        return None
+
+    def get_total_orders(self, obj):
+       return 18 
+
+    def get_creators_hired(self, obj):
+        return 12
+
+
+class LogoUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = ClientProfileModel
+        fields = ['logo']
 
     
